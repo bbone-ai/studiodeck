@@ -83,6 +83,7 @@ strong{ font-weight:700; color:var(--ink); }
 .stat .v{ font-family:var(--heading); font-weight:700; font-size:clamp(30px,4.4vw,60px); line-height:1; color:var(--accent-soft); }
 .stat .l{ margin-top:.5rem; font-size:clamp(12.5px,1vw,15px); color:var(--muted70); max-width:26ch; }
 .iconrow{ display:grid; grid-template-columns:repeat(var(--cols,4),1fr); gap:clamp(14px,1.8vw,30px); justify-items:center; }
+.iconrow > div{ display:flex; flex-direction:column; align-items:center; text-align:center; }
 .iconcircle{ width:clamp(64px,7vw,104px); height:clamp(64px,7vw,104px); border-radius:50%; background:#ffffff; border:2.5px solid; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(20,45,75,.10); }
 .iconcircle svg{ width:58%; height:58%; display:block; }
 .iconlabel{ margin-top:.6rem; font-family:var(--heading); font-weight:700; font-size:clamp(12px,1.1vw,16px); text-align:center; }
@@ -154,7 +155,7 @@ strong{ font-weight:700; color:var(--ink); }
     <div style="text-align:center; max-width:1060px; margin:0 auto;">
       <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">Oxford North · Oxford's new innovation district</div>
       <h2 class="reveal d1">Oxford is ground zero</h2>
-      <p class="lede reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">Oxford North is the city's new <strong>£1.2bn</strong> innovation district — a million square feet of labs and workspace, three new public parks, and thousands of jobs arriving from 2026. It is exactly the room young people are never invited into. <em>That is where we want to plant the Studio.</em></p>
+      <p class="lede reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">Oxford North is the city's new <strong>£1.2bn</strong> innovation district — a million square feet of labs and workspace, three new public parks, and thousands of jobs arriving from 2026. It is exactly the room young people are never invited into.<br><em>That is where we want to plant the Studio.</em></p>
       <div class="stats four reveal d3" style="text-align:left;">
         <div class="stat"><div class="v" data-count="1.2" data-prefix="£" data-suffix="bn" data-dec="1">£1.2bn</div><div class="l">flagship innovation district, opened 2025 (Oxford North)</div></div>
         <div class="stat"><div class="v" data-count="1" data-suffix="M sq ft">1M sq ft</div><div class="l">of laboratories &amp; workspace across the masterplan</div></div>
@@ -170,8 +171,8 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="tag">What we build</div><div class="num"></div>
     <div style="max-width:60ch;">
       <div class="eyebrow reveal">The model</div>
-      <h2 class="reveal d1" style="max-width:20ch;">Build culture over learning culture</h2>
-      <p class="lede reveal d2" style="margin-top:1.2rem;">The Studio is defined by what comes out of it: real products, real tools, real change. Youth club meets innovation lab meets startup incubator — for young people who have never been invited into those rooms before.</p>
+      <h2 class="reveal d1" style="max-width:20ch;">Pathways,<br>not pitstops</h2>
+      <p class="lede reveal d2" style="margin-top:1.2rem;">Youth club meets innovation lab meets startup incubator — for young people who have never been invited into those rooms before.</p>
       <p class="lede reveal d3" style="margin-top:1.1rem; color:var(--muted70);">Every programme is connected to a real problem, a real product, or a real community challenge. Nothing is simulated. Every session ends with something made.</p>
     </div>
   </section>
@@ -181,7 +182,7 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="tag">What happens inside</div><div class="num"></div>
     <div style="max-width:1040px; margin:0 auto; text-align:center;">
       <div class="eyebrow reveal" style="margin:0 auto;">The programmes</div>
-      <h2 class="reveal d1" style="margin:.3rem auto 0;">Where ideas become things</h2>
+      <h2 class="reveal d1" style="margin:.3rem auto 0;">Where ideas become reality</h2>
       <div class="iconrow reveal d2" style="--cols:3; margin:2rem auto 0; max-width:880px;" id="iconrow"></div>
     </div>
   </section>
@@ -192,14 +193,14 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="two top">
       <div>
         <div class="eyebrow reveal">Beta testing as a business model</div>
-        <h2 class="reveal d1" style="max-width:18ch;">The best research partner in the youth sector</h2>
+        <h2 class="reveal d1" style="max-width:18ch;">EdTech Research Hub</h2>
         <p class="lede reveal d2" style="margin-top:1.1rem;">Young people's insight is commercially valuable. EdTech companies and technology organisations pay to access Studio cohorts as research participants and product testers — <em>one of the most significant and underexploited revenue streams in the youth sector.</em></p>
       </div>
       <div class="reveal d2" style="align-self:center;">
         <div class="glass">
-          <div class="pillar"><div class="k">Young people</div><div class="small">Real-world experience as researchers and testers.</div></div>
-          <div class="pillar" style="margin-top:1.1rem;"><div class="k">Partners</div><div class="small">Genuine insight from the generation using their products.</div></div>
-          <div class="pillar" style="margin-top:1.1rem;"><div class="k">The Studio</div><div class="small">Income that funds free-access programmes.</div></div>
+          <div class="pillar" style="display:flex; gap:14px; align-items:flex-start;"><div style="flex:0 0 auto; margin-top:1px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#15D3FC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg></div><div><div class="k">Young people</div><div class="small">Real-world experience as researchers and testers.</div></div></div>
+          <div class="pillar" style="display:flex; gap:14px; align-items:flex-start; margin-top:1.1rem;"><div style="flex:0 0 auto; margin-top:1px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#15D3FC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></div><div><div class="k">Partners</div><div class="small">Genuine insight from the generation using their products.</div></div></div>
+          <div class="pillar" style="display:flex; gap:14px; align-items:flex-start; margin-top:1.1rem;"><div style="flex:0 0 auto; margin-top:1px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#15D3FC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div><div><div class="k">The Studio</div><div class="small">Income that funds free-access programmes.</div></div></div>
         </div>
       </div>
     </div>
@@ -220,13 +221,13 @@ strong{ font-weight:700; color:var(--ink); }
   </section>
 
   <!-- 8 · PROOF / METHODOLOGY -->
-  <section class="slide" data-name="The Method">
+  <section class="slide center-bg" data-name="The Method">
     <div class="tag">How it works</div><div class="num"></div>
-    <div style="max-width:62ch;">
-      <div class="eyebrow reveal">The OXIE Innovation Academy</div>
-      <h2 class="reveal d1" style="max-width:22ch;">Research it. Build it. Pitch it.</h2>
-      <p class="lede reveal d2" style="margin-top:1.1rem;">Young people work in focus groups to research a real-world problem, invent a solution, build a working demonstration, and present it to decision-makers — councillors, investors, and CEOs in the room.</p>
-      <div class="pillars reveal d3" style="margin-top:1.6rem;">
+    <div style="max-width:1120px; margin:0 auto; text-align:center;">
+      <div class="eyebrow reveal" style="margin:0 auto;">The OXIE Innovation Academy</div>
+      <h2 class="reveal d1" style="white-space:nowrap;">Research it. Build it. Pitch it.</h2>
+      <p class="lede reveal d2" style="margin:1.1rem auto 0; max-width:70ch;">Young people work in focus groups to research a real-world problem, invent a solution, build a working demonstration, and present it to decision-makers — councillors, investors, and CEOs in the room.</p>
+      <div class="pillars reveal d3" style="margin-top:1.8rem; text-align:left;">
         <div class="glass pillar"><div class="k">Problem &amp; research</div><div class="small">Identify a real problem, analyse its causes, design a solution.</div></div>
         <div class="glass pillar"><div class="k">Teamwork &amp; leadership</div><div class="small">Organise roles, manage tasks, communicate ideas.</div></div>
         <div class="glass pillar"><div class="k">Pitch &amp; confidence</div><div class="small">Build a pitch deck and present it live, with real stakes.</div></div>
@@ -242,6 +243,7 @@ strong{ font-weight:700; color:var(--ink); }
         <div class="eyebrow reveal">Radical inclusion</div>
         <h2 class="reveal d1" style="max-width:18ch;">We design the barrier away</h2>
         <p class="lede reveal d2" style="margin-top:1.1rem;">The young people who most need this space are the ones least likely to walk through the door. We design everything to remove that barrier: access, cost, transport, culture, and expectation.</p>
+        <p class="small reveal d3" style="margin-top:1rem;">Location makes that real: the <strong>Pear Tree Park &amp; Ride</strong> sits a short walk from Oxford North, on the frequent 300 bus and a dozen other routes — a major transport asset that makes the Studio genuinely reachable for young people across the city and county, whatever their postcode or budget.</p>
       </div>
       <div class="reveal d2" style="align-self:center;">
         <div class="glass">
@@ -260,7 +262,7 @@ strong{ font-weight:700; color:var(--ink); }
       <h2 class="reveal d1">Three steps to scale</h2>
       <div class="pillars reveal d2" style="margin-top:1.8rem;">
         <div class="glass pillar"><div class="eyebrow" style="color:var(--accent-soft);">✓ Done</div><div class="k">The model is built</div><div class="small">Programmes designed, brand set, partners lined up, and first activities already running.</div></div>
-        <div class="glass pillar"><div class="eyebrow">Now</div><div class="k">Plant ground zero</div><div class="small">Secure the Studio's permanent home at Oxford North and launch the first full year of programmes.</div></div>
+        <div class="glass pillar"><div class="eyebrow">Now</div><div class="k">Plant ground zero</div><div class="small">Secure the Studio's flagship location at Oxford North and launch the first full year of programmes.</div></div>
         <div class="glass pillar"><div class="eyebrow">Next</div><div class="k">Prove, then scale</div><div class="small">Validate the model and revenue in Oxford, then roll out hubs across the UK on the same playbook.</div></div>
       </div>
     </div>
@@ -300,18 +302,19 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="two top">
       <div>
         <div class="eyebrow reveal">The number · full-year ask</div>
-        <div class="bigroi reveal d1">£110,770</div>
-        <p class="lede reveal d2" style="margin-top:.6rem; max-width:32ch;">A full-time Director plus every programme — Academies, Coding Corner, and Drone Football — venue included.</p>
-        <p class="tiny reveal d3" style="margin-top:1rem; max-width:44ch;">Per year. Director incl. ~15% employer on-costs; Drone Football includes a one-time equipment kit. Lower tiers from £87,150 (Director + 3 Academies). Sourced from the OCC proposal and the DF 2026 price list; club costs are sessional estimates.</p>
+        <div class="bigroi reveal d1">£129,350</div>
+        <p class="lede reveal d2" style="margin-top:.6rem; max-width:32ch;">A full-time Director plus every programme — Academies, Coding Corner, and Drone Football.</p>
+        <p class="tiny reveal d3" style="margin-top:1rem; max-width:44ch;">Per year, incl. 25% overhead. Director incl. ~15% employer on-costs; Drone Football includes a one-time equipment kit. Lower tiers from £105,000 (Director + 3 Academies).</p>
+        <p class="tiny reveal d3" style="margin-top:.7rem; max-width:44ch; color:var(--accent-soft);">Venue hire sits outside this figure — negotiable, and contingent on our Better Futures Fund bid (DCMS's £500m fund for young people; Round 1 opens summer 2026), which we would submit together to renovate and equip the youth space itself.</p>
       </div>
       <div class="glass reveal d2">
         <div class="askline" style="border-top:none;"><span><strong>Studio Director</strong> · full-time, incl. on-costs</span><span class="amt">£69,000</span></div>
         <div class="askline"><span>3 × OXIE Academies · facilitation + delivery</span><span class="amt">£15,000</span></div>
-        <div class="askline"><span>Venue hire · Academies + weekly clubs</span><span class="amt">£7,290</span></div>
         <div class="askline"><span>Coding Corner · weekly sessions</span><span class="amt">£5,760</span></div>
         <div class="askline"><span>Drone Football · weekly sessions</span><span class="amt">£6,480</span></div>
         <div class="askline"><span>Drone Football · equipment (one-time)</span><span class="amt">£7,240</span></div>
-        <div class="asktot"><span>Full year · all-in</span><span class="amt">£110,770</span></div>
+        <div class="askline"><span>Overhead &amp; core costs (25%)</span><span class="amt">£25,870</span></div>
+        <div class="asktot"><span>Full year · all-in</span><span class="amt">£129,350</span></div>
       </div>
     </div>
   </section>
@@ -384,7 +387,11 @@ function icon(key,c){
    bulb:`<circle cx="50" cy="45" r="20"/><path d="M43,43 l7,9 l7,-9"/><path d="M40,68 h20"/><path d="M43,77 h14"/>`,
    cap:`<path d="M50,30 L92,46 L50,60 L8,46 Z"/><path d="M32,52 v15 c0,9 36,9 36,0 v-15"/><path d="M92,46 v22"/><circle cx="92" cy="71" r="3.6" fill="${c}"/>`,
    people:`<circle cx="37" cy="34" r="11"/><path d="M19,74 c0,-13 36,-13 36,0"/><circle cx="69" cy="42" r="8"/><path d="M56,74 c0,-10 26,-10 26,0"/>`,
-   star:`<path d="M50,20 L60,41 L83,44 L66,60 L70,83 L50,72 L30,83 L34,60 L17,44 L40,41 Z"/>`
+   star:`<path d="M50,20 L60,41 L83,44 L66,60 L70,83 L50,72 L30,83 L34,60 L17,44 L40,41 Z"/>`,
+   clock:`<circle cx="50" cy="52" r="30"/><path d="M50,52 V34"/><path d="M50,52 L65,61"/>`,
+   screen:`<rect x="16" y="24" width="68" height="46" rx="5"/><path d="M40,70 v9 M60,70 v9 M33,82 h34"/><path d="M44,40 l-9,7 l9,7 M56,40 l9,7 l-9,7"/>`,
+   magnifier:`<circle cx="45" cy="44" r="21"/><path d="M60,59 L80,79"/>`,
+   drone:`<rect x="42" y="45" width="16" height="12" rx="2"/><path d="M43,49 L26,36 M57,49 L74,36 M43,55 L26,70 M57,55 L74,70"/><ellipse cx="24" cy="34" rx="12" ry="4.5"/><ellipse cx="76" cy="34" rx="12" ry="4.5"/><ellipse cx="24" cy="72" rx="12" ry="4.5"/><ellipse cx="76" cy="72" rx="12" ry="4.5"/>`
   };
   return `<svg viewBox="0 0 100 100"><g ${s}>${M[key]||''}</g></svg>`;
 }
@@ -393,11 +400,11 @@ function icon(key,c){
   const SKY='#15D3FC', MINT='#64E193';
   const items=[
     ['bulb',SKY,'Innovation Labs','Hands-on, project-based building'],
-    ['rocket',MINT,'AI &amp; Vibe Coding','Real tools, built with mentors'],
-    ['star',SKY,'Hackathons','24–48hr community challenges'],
-    ['palette',MINT,'Beta Testing','Paid research with real cohorts'],
+    ['screen',MINT,'AI Vibe Coding','Real tools, built with mentors'],
+    ['clock',SKY,'Hackathons','24–48hr community challenges'],
+    ['magnifier',MINT,'Beta Testing','Paid research with real cohorts'],
     ['cap',SKY,'OXIE Academy','8–12 week mentored projects'],
-    ['people',MINT,'Drone Football','Weekly STEM &amp; teamwork club']
+    ['drone',MINT,'Drone Football','Weekly STEM &amp; teamwork club']
   ];
   r.innerHTML=items.map(([k,c,l,sub])=>`<div><div class="iconcircle" style="border-color:${c}">${icon(k,c)}</div><div class="iconlabel">${l}</div><div class="iconsub">${sub}</div></div>`).join('');
 })();
