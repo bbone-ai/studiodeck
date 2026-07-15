@@ -82,6 +82,13 @@ strong{ font-weight:700; color:var(--ink); }
 @media(max-width:900px){ .stats,.stats.four{ grid-template-columns:1fr 1fr; } }
 .stat .v{ font-family:var(--heading); font-weight:700; font-size:clamp(30px,4.4vw,60px); line-height:1; color:var(--accent-soft); }
 .stat .l{ margin-top:.5rem; font-size:clamp(12.5px,1vw,15px); color:var(--muted70); max-width:26ch; }
+.stat.pulse{ position:relative; cursor:pointer; }
+.stat.pulse .v{ display:inline-block; animation:pulseGlow 2.2s ease-in-out infinite; }
+@keyframes pulseGlow{ 0%,100%{ transform:scale(1); text-shadow:0 0 0 rgba(var(--spot-2),0); } 50%{ transform:scale(1.07); text-shadow:0 0 26px rgba(var(--spot-2),.6); } }
+@media (prefers-reduced-motion:reduce){ .stat.pulse .v{ animation:none; } }
+.statpop{ position:absolute; bottom:calc(100% + 14px); right:0; width:min(340px,72vw); background:var(--bg); border:1.5px solid var(--accent-soft); border-radius:14px; padding:16px 19px; font-size:14.5px; line-height:1.55; color:var(--ink); font-weight:500; box-shadow:0 18px 44px rgba(20,45,75,.28); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .3s, transform .3s; z-index:6; text-align:left; }
+.statpop::after{ content:''; position:absolute; top:100%; right:34px; border:9px solid transparent; border-top-color:var(--accent-soft); }
+.stat.pulse:hover .statpop, .stat.pulse:focus-within .statpop{ opacity:1; transform:none; }
 .iconrow{ display:grid; grid-template-columns:repeat(var(--cols,4),1fr); gap:clamp(14px,1.8vw,30px); justify-items:center; }
 .iconrow > div{ display:flex; flex-direction:column; align-items:center; text-align:center; }
 .iconcircle{ width:clamp(64px,7vw,104px); height:clamp(64px,7vw,104px); border-radius:50%; background:#ffffff; border:2.5px solid; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(20,45,75,.10); }
@@ -134,25 +141,30 @@ strong{ font-weight:700; color:var(--ink); }
     <div style="max-width:920px; margin:auto; text-align:center; display:flex; flex-direction:column; align-items:center;">
       <div class="logo reveal d1" style="width:min(100%,700px); height:clamp(200px,40vh,440px); background-position:center;"></div>
       <div class="eyebrow reveal d2" style="margin-top:1.4rem;">A hybrid youth club · innovation lab · research hub</div>
-      <div class="reveal d3" style="margin-top:1.6rem;"><span class="chip">Pilot launches September 2026 · Charlbury Memorial Hall</span>&nbsp;&nbsp;<span class="chip">Part of the OXIE accelerator</span></div>
+      <div class="reveal d3" style="margin-top:1.6rem;"><span class="chip">Pilot targets September 2026 · Charlbury</span>&nbsp;&nbsp;<span class="chip">Part of the OXIE accelerator</span></div>
     </div>
   </section>
 
   <!-- 2 · THE PROBLEM -->
   <section class="slide" data-name="The Problem">
     <div class="tag">The problem</div><div class="num"></div>
-    <div class="two top">
-      <div>
-        <div class="eyebrow reveal">Why we exist</div>
-        <h2 class="reveal d1" style="max-width:20ch;">Innovation belongs to everyone</h2>
-        <p class="lede reveal d2" style="margin-top:1.2rem;">Not just those who went to the right school, live in the right city, or had the right start.</p>
-        <p class="lede reveal d3" style="margin-top:1.1rem; color:var(--muted70);">The young people who most need this space are the ones least likely to walk through the door. We design everything to remove that barrier: access, cost, transport, culture, and expectation.</p>
-      </div>
-      <div class="reveal d3" style="align-self:center;">
-        <div class="glass">
-          <div class="small"><strong style="color:var(--accent-soft);">We always</strong> — keep the door free or subsidised for those who can't pay. Connect every young person to a real problem and a real pathway. Track progression and celebrate milestones.</div>
-          <div class="small" style="margin-top:1.1rem;"><strong style="color:var(--accent-soft);">We never</strong> — run a one-off experience and call it a pathway. Simulate the work. Let a young person's background decide whether they belong in the room.</div>
+    <div style="max-width:1120px;">
+      <div class="eyebrow reveal">Why we exist</div>
+      <h2 class="reveal d1" style="max-width:26ch;">Every week, a youth club in Britain closes</h2>
+      <div class="two top" style="margin-top:1.2rem;">
+        <div>
+          <p class="small reveal d2" style="max-width:58ch;">The third spaces where teenagers hang out after school, find mentors, and belong have been vanishing for two decades. A generation is lonelier, more anxious, and more cut off from community than any before it — young people are craving community, and hopelessness is beginning at age 10. We call it <em>the hope gap</em>. OXIE exists to close it.</p>
+          <p class="lede reveal d3" style="margin-top:1.2rem;"><em>"What we have in this generation isn't a skills crisis. It's an identity crisis."</em><br><span class="small">— Bryanna Bone, Closing the Hope Gap, 2026</span></p>
         </div>
+        <div class="media-fixed reveal d3" style="--media-w:300px; min-height:220px;">
+          <img src="guardian-clipping.png" alt="The Guardian: Britain's youth clubs have been quietly decimated. What's most revealing is that few seem to care — John Harris, 12 Oct 2025" class="clip" />
+        </div>
+      </div>
+      <div class="stats four reveal d4" style="margin-top:1.6rem;">
+        <div class="stat"><div class="v" data-count="750" data-suffix="+">750+</div><div class="l">UK youth centres lost in a decade as the third space vanished</div></div>
+        <div class="stat"><div class="v">1 in 5</div><div class="l">young people now has a probable mental health disorder (NHS, 2023)</div></div>
+        <div class="stat"><div class="v" data-count="88" data-suffix="%">88%</div><div class="l">of 18–24s feel lonely to some degree — now the loneliest age group</div></div>
+        <div class="stat pulse" tabindex="0"><div class="v" data-count="6.4" data-prefix="£" data-dec="2">£6.40</div><div class="l">returned for every £1 invested in youth work (UK Youth)</div><div class="statpop">"The money already exists — it is just spent later, on the consequences, instead of earlier, on the child."</div></div>
       </div>
     </div>
   </section>
@@ -179,8 +191,19 @@ strong{ font-weight:700; color:var(--ink); }
     <div style="text-align:center; max-width:1060px; margin:0 auto;">
       <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">Stage one · Charlbury</div>
       <h2 class="reveal d1">Charlbury is ground zero</h2>
-      <p class="small reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">The pilot launches at Charlbury Memorial Hall in September 2026 — the model proven with a real cohort, then taken on the road: pop-up hackathons, workshops, and exhibitions across the South East.</p>
+      <p class="small reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">The pilot targets Charlbury Memorial Hall for September 2026 (venue to be confirmed) — the model proven with a real cohort, then taken on the road: pop-up hackathons, workshops, and exhibitions across the South East.</p>
       <img class="clip reveal d3" src="league.jpg" alt="Drone Football league in action" style="width:min(100%,600px); height:clamp(240px,36vh,420px); object-fit:cover; margin:1.4rem auto 0; display:block;" />
+    </div>
+  </section>
+
+  <!-- 3a-ii · CHARLBURY STUDIO PLAN (interactive) -->
+  <section class="slide center-bg" data-name="Charlbury Studio Plan">
+    <div class="tag">Ground zero</div><div class="num"></div>
+    <div style="text-align:center; max-width:1060px; margin:0 auto; width:100%;">
+      <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">Charlbury · Target venue: Memorial Hall</div>
+      <h2 class="reveal d1">The Charlbury studio plan</h2>
+      <p class="small reveal d2" style="margin:1.1rem auto 0; max-width:90ch;">Pan, zoom and click through each zone.<br><span class="tiny" style="display:block; margin-top:.5rem; max-width:80ch; margin-left:auto; margin-right:auto;">At launch in September 2026, the Cafe corner, Study area, Art Corner and Drone Football run as regular provision. The Youth Kitchen and Coding Corner start as pop-ups — cooking and coding workshops — becoming regular provision once compliance and staffing requirements are met.</span></p>
+      <iframe class="clip reveal d3" src="memorial-hall-floorplan.html" title="Charlbury Memorial Hall interactive plan" loading="lazy" style="height:min(64vh,560px); margin:1.4rem auto 0; border:1px solid var(--line);"></iframe>
     </div>
   </section>
 
@@ -189,7 +212,7 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="tag">Stage two</div><div class="num"></div>
     <div style="text-align:center; max-width:1060px; margin:0 auto;">
       <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">Oxford North · Oxford's new innovation district</div>
-      <h2 class="reveal d1">Oxford North is stage two</h2>
+      <h2 class="reveal d1">Oxford North is our stage two target</h2>
       <p class="small reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">Oxford North is the city's new <strong>£1.2bn</strong> innovation district — a million square feet of labs and workspace, three new public parks, and thousands of jobs arriving.<br><em>We've already run a Drone Football Pop-Up there. Once the Charlbury pilot is proven and an Oxfordshire-wide fundraise is secured, this becomes our permanent Studio and office, from 2027/28.</em></p>
       <img class="clip reveal d3" src="red-hall.jpeg" alt="The Red Hall, Oxford North" style="width:min(100%,600px); height:clamp(240px,36vh,420px); object-fit:cover; margin:1.4rem auto 0; display:block;" />
       <div class="stats four reveal d3" style="text-align:left; margin-top:1.4rem;">
@@ -202,27 +225,32 @@ strong{ font-weight:700; color:var(--ink); }
     </div>
   </section>
 
-  <!-- 4 · THE MODEL -->
-  <section class="slide" data-name="The Model">
-    <div class="tag">What we build</div><div class="num"></div>
-    <div class="two top">
-      <div>
-        <div class="eyebrow reveal">The model</div>
-        <h2 class="reveal d1" style="max-width:22ch;">Youth club meets innovation lab meets research hub</h2>
-        <p class="lede reveal d2" style="margin-top:1.2rem; color:var(--muted70);">Every programme is connected to a real problem, a real product, or a real community challenge. Nothing is simulated. Every session ends with something made.</p>
-      </div>
-      <div class="reveal d2" style="align-self:center;"><div class="glass"><div class="eyebrow" style="margin-bottom:.8rem;">Our ethos</div><div style="font-family:var(--title); font-weight:600; font-size:clamp(19px,2.1vw,26px); line-height:1.3;">"We do not bring innovation to young people. We build the space where they discover they are already capable of it."</div><div class="small" style="margin-top:.9rem;">— Bryanna Bone, Founder &amp; CEO, OXIE</div></div></div>
+  <!-- 3b-ii · OXFORD NORTH STUDIO PLAN (interactive) -->
+  <section class="slide center-bg" data-name="Oxford North Studio Plan">
+    <div class="tag">Stage two</div><div class="num"></div>
+    <div style="text-align:center; max-width:1060px; margin:0 auto; width:100%;">
+      <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">Oxford North · Target venue · Interactive plan</div>
+      <h2 class="reveal d1">Explore the studio plan</h2>
+      <p class="small reveal d2" style="margin:1.1rem auto 0; max-width:60ch;">Pan, zoom and click through each zone of the proposed Oxford North studio.</p>
+      <iframe class="clip reveal d3" src="oxford-north-floorplan.html" title="Oxford North Studio interactive plan" loading="lazy" style="height:min(64vh,560px); margin:1.4rem auto 0; border:1px solid var(--line);"></iframe>
     </div>
   </section>
 
-  <!-- 4b · THE SANDBOX -->
-  <section class="slide center-bg" data-name="The Sandbox">
+  <!-- 4 · THE MODEL -->
+  <section class="slide" data-name="The Model">
     <div class="tag">What innovation means here</div><div class="num"></div>
-    <div style="max-width:900px; margin:0 auto; text-align:center;">
-      <div class="eyebrow reveal" style="margin:0 auto 1.1rem;">In Bryanna's words</div>
-      <h2 class="reveal d1">A Youth Innovation Studio is like a sandbox</h2>
-      <p class="lede reveal d2" style="margin:1.4rem auto 0; max-width:64ch;">It reframes innovation not just as AI and apps, but includes how the food industry is being innovated upon with sustainability with zero-waste restaurants and festivals. The Studio includes innovative art classes and exhibits, leadership sessions and book shelves, because future innovators must be free thinking, creative, critically minded, multi-disciplined visionaries.</p>
-      <p class="lede reveal d3" style="margin:1.2rem auto 0;"><em>Not just tech savvy.</em></p>
+    <div style="max-width:1120px;">
+      <div class="eyebrow reveal">In Bryanna's words</div>
+      <h2 class="reveal d1" style="max-width:26ch;">A Youth Innovation Studio is like a sandbox</h2>
+      <div class="two top" style="margin-top:1.2rem;">
+        <div>
+          <p class="small reveal d2" style="max-width:58ch;">It reframes innovation not just as AI and apps: the food industry is being innovated upon with sustainability — zero-waste restaurants and festivals. Fashion is being innovated upon with bio-engineered leather and upcycling. The Studio includes leadership sessions and book clubs, because future innovators must be free thinking, creative, critically minded, multi-disciplined visionaries.</p>
+          <p class="lede reveal d3" style="margin-top:1.2rem;"><em>Not just tech savvy.</em></p>
+        </div>
+        <div class="reveal d3" style="align-self:center;">
+          <div class="glass"><div class="eyebrow" style="margin-bottom:.8rem;">Our ethos</div><div style="font-family:var(--title); font-weight:600; font-size:clamp(19px,2.1vw,26px); line-height:1.3;">"We do not bring innovation to young people. We build the space where they discover they are already capable of it."</div><div class="small" style="margin-top:.9rem;">— Bryanna Bone, Founder &amp; CEO, OXIE</div></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -242,7 +270,7 @@ strong{ font-weight:700; color:var(--ink); }
     <div class="two top">
       <div>
         <div class="eyebrow reveal">Beta testing as a business model</div>
-        <h2 class="reveal d1" style="max-width:18ch;">EdTech Research Hub</h2>
+        <h2 class="reveal d1" style="max-width:18ch;">OXIE's Research Academy</h2>
         <p class="lede reveal d2" style="margin-top:1.1rem;">Young people's insight is commercially valuable. EdTech companies and technology organisations pay to access Studio cohorts as research participants and product testers — <em>one of the most significant and underexploited revenue streams in the youth sector.</em></p>
       </div>
       <div class="reveal d2" style="align-self:center;">
@@ -276,8 +304,8 @@ strong{ font-weight:700; color:var(--ink); }
       <div class="eyebrow reveal">Oxford first, everywhere next</div>
       <h2 class="reveal d1">Three steps to scale</h2>
       <div class="pillars reveal d2" style="margin-top:1.8rem;">
-        <div class="glass pillar"><div class="eyebrow" style="color:var(--accent-soft);">Now · September 2026</div><div class="k">The Charlbury pilot launches</div><div class="small">The first Youth Innovation Studio pilot opens this September at Charlbury Memorial Hall, once urgent opening costs are secured by 31 August — the model live, with a real cohort.</div></div>
-        <div class="glass pillar"><div class="eyebrow">2027/28</div><div class="k">Permanent home at Oxford North</div><div class="small">Conditional on an Oxfordshire-wide fundraise: a permanent location and office at Oxford North. Oxford North and Oxfordshire Youth have already expressed interest in scaling the venture.</div></div>
+        <div class="glass pillar"><div class="eyebrow" style="color:var(--accent-soft);">Now · September 2026</div><div class="k">The Charlbury pilot</div><div class="small">The first Youth Innovation Studio pilot targets this September at Charlbury Memorial Hall (venue to be confirmed), once urgent opening costs are secured by 31 August — the model live, with a real cohort.</div></div>
+        <div class="glass pillar"><div class="eyebrow">2027/28</div><div class="k">Target: permanent home at Oxford North</div><div class="small">Conditional on an Oxfordshire-wide fundraise: a permanent location and office at Oxford North (venue to be confirmed). Oxford North and Oxfordshire Youth have already expressed interest in scaling the venture.</div></div>
         <div class="glass pillar"><div class="eyebrow">Next</div><div class="k">Prove, then scale</div><div class="small">Validate the model and revenue in Oxfordshire, then roll out hubs across the UK on the same playbook.</div></div>
       </div>
     </div>
@@ -289,16 +317,49 @@ strong{ font-weight:700; color:var(--ink); }
       <div>
         <div class="eyebrow reveal">The ask · a staged funding strategy</div>
         <div class="bigroi reveal d1">£7,488</div>
-        <p class="lede reveal d2" style="margin-top:.6rem; max-width:36ch;">Urgently needed by 31 August 2026 to open Charlbury Memorial Hall: the venue and a youth worker in training.</p>
-        <p class="tiny reveal d3" style="margin-top:1rem; max-width:44ch;">Then a September–December crowdfunding and grant campaign for the remaining £60,000 in year-one costs, before a joint fundraise for a permanent Oxford North base from 2027/28. Year-one Charlbury pilot budget: £67,488 all-in. Detailed budget available on request.</p>
+        <p class="lede reveal d2" style="margin-top:.6rem; max-width:36ch;">Urgently needed by 31 August 2026 to open Charlbury Memorial Hall (target venue): the venue hire and a youth worker in training.</p>
+        <p class="tiny reveal d3" style="margin-top:1rem; max-width:44ch;">Then a September–December crowdfunding and grant campaign for the remaining £82,500 in year-one costs, before a joint fundraise for a target permanent base at Oxford North from 2027/28. Year-one Charlbury pilot budget: £90,000 all-in. Detailed budget available on request.</p>
       </div>
       <div class="reveal d2" style="align-self:center;">
         <div class="glass">
-          <div class="pillar"><div class="eyebrow" style="color:var(--accent-soft);">Now · by 31 August 2026</div><div class="k">Urgent: open Charlbury Memorial Hall</div><div class="small">Venue hire (£4,032) and a youth worker in training (£3,456) — £7,488 to unlock the September pilot.</div></div>
-          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">September–December 2026</div><div class="k">Crowdfunding &amp; grants</div><div class="small">A public campaign for the remaining £60,000 in year-one costs: equipment, Studio Director salary, events, marketing, running costs, and overhead.</div></div>
-          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">2027/28</div><div class="k">The permanent Oxford North base</div><div class="small">Conditional on an Oxfordshire-wide fundraise — a permanent location and office at Oxford North, with Oxford North and Oxfordshire Youth already expressing interest in scaling the venture.</div></div>
+          <div class="pillar"><div class="eyebrow" style="color:var(--accent-soft);">Now · by 31 August 2026</div><div class="k">Urgent: open Charlbury Memorial Hall (target venue)</div><div class="small">Venue hire (£4,032) and a youth worker in training (£3,456) — £7,488 to unlock the September pilot.</div></div>
+          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">September–December 2026</div><div class="k">Crowdfunding &amp; grants</div><div class="small">A public campaign for the remaining £82,500 in year-one costs: equipment, a qualified youth counsellor, an OXIE Academy camp, Youth Kitchen workshops, the Studio Director, events and workshops, and overhead (marketing, compliance, accounting).</div></div>
+          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">2027/28</div><div class="k">Target: permanent Oxford North base</div><div class="small">Conditional on an Oxfordshire-wide fundraise — a permanent location and office at Oxford North (venue to be confirmed), with Oxford North and Oxfordshire Youth already expressing interest in scaling the venture.</div></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 14b · SUSTAINABLE CHARLBURY — TIERED ASK -->
+  <section class="slide" data-name="Sustainable Charlbury">
+    <div class="tag">The investment · Sustainable Charlbury</div><div class="num"></div>
+    <div style="max-width:1120px;">
+      <div class="eyebrow reveal">For Sustainable Charlbury · tiers are cumulative</div>
+      <h2 class="reveal d1" style="max-width:26ch;">A tiered ask: low, medium, high</h2>
+      <div class="pillars reveal d2" style="margin-top:1.8rem;">
+        <div class="glass pillar">
+          <div class="eyebrow" style="color:var(--accent-soft);">Low · urgent — by 31 August 2026</div>
+          <div class="k" style="font-size:clamp(26px,2.6vw,38px);">£7,488</div>
+          <div class="small" style="margin:.4rem 0 .8rem;">Opens the doors in September.</div>
+          <div class="askline"><span>Memorial Hall venue hire</span><span class="amt">£4,032</span></div>
+          <div class="askline"><span>Youth worker in training, from end of August</span><span class="amt">£3,456</span></div>
+        </div>
+        <div class="glass pillar">
+          <div class="eyebrow">Medium · cumulative</div>
+          <div class="k" style="font-size:clamp(26px,2.6vw,38px);">£11,428</div>
+          <div class="small" style="margin:.4rem 0 .8rem;">Everything in Low, plus:</div>
+          <div class="askline"><span>Equipment — computers, laptops, Art Corner supplies, pool table</span><span class="amt">£2,500</span></div>
+          <div class="askline"><span>Qualified youth counsellor — £40 × 36 sessions</span><span class="amt">£1,440</span></div>
+        </div>
+        <div class="glass pillar">
+          <div class="eyebrow">High · cumulative</div>
+          <div class="k" style="font-size:clamp(26px,2.6vw,38px);">£19,228</div>
+          <div class="small" style="margin:.4rem 0 .8rem;">Everything in Medium, plus:</div>
+          <div class="askline"><span>OXIE Academy camp with DiversITy Talent</span><span class="amt">£3,000</span></div>
+          <div class="askline"><span>Youth Kitchen workshops — 12 × £400</span><span class="amt">£4,800</span></div>
+        </div>
+      </div>
+      <p class="tiny reveal d3" style="margin-top:1.2rem;">Every tier sits inside the £90,000 year-one Charlbury pilot budget. Drone Football equipment is deliberately deferred to year two. Detailed budget available on request.</p>
     </div>
   </section>
 
@@ -321,9 +382,12 @@ strong{ font-weight:700; color:var(--ink); }
   <section class="slide center-bg" data-name="Invite">
     <div class="tag">The invitation</div><div class="num"></div>
     <div style="max-width:900px; margin:auto; text-align:center; display:flex; flex-direction:column; align-items:center;">
-      <div class="logo reveal d1" style="width:min(100%,620px); height:clamp(150px,32vh,320px); background-position:center;"></div>
-      <div class="door reveal d2" style="margin-top:.6rem; font-size:clamp(13px,1.3vw,16px); line-height:1.5; letter-spacing:.1em; text-transform:uppercase;">Part of OXIE's Youth Innovation Ecosystem Strategy</div>
-      <p class="lede reveal d3" style="max-width:54ch; margin-top:1.2rem;">A network of Youth Innovation Studio hubs across the UK — spaces where every young person, regardless of background, has access to technology, mentorship, and apprenticeship opportunities.</p>
+      <div class="reveal d1" style="display:flex; align-items:center; justify-content:center; gap:clamp(32px,5vw,72px); flex-wrap:wrap; width:100%;">
+        <img src="oxie-logo-black.png" alt="OXIE" style="width:clamp(230px,25vw,360px); height:auto; flex-shrink:0;" />
+        <div class="logo" style="width:clamp(280px,32vw,460px); height:clamp(200px,34vh,360px); background-position:center; flex-shrink:0;"></div>
+      </div>
+      <div class="door reveal d2" style="margin-top:1rem; font-size:clamp(13px,1.3vw,16px); line-height:1.5; letter-spacing:.1em; text-transform:uppercase;">Part of OXIE's Youth Innovation Ecosystem Strategy</div>
+      <p class="small reveal d4" style="max-width:60ch; margin-top:1.1rem;">Oxford is the UK's second most unequal city (Centre for Cities). OXIE is actively working with partners across Oxfordshire and sectors to close that gap by creating the UK's first <em>Youth Innovation Ecosystem</em>.</p>
       <div class="cta-row reveal d4" style="justify-content:center;"><a class="pill" href="mailto:bbone@oxie.org.uk">Start the conversation</a><a href="mailto:bbone@oxie.org.uk">bbone@oxie.org.uk</a></div>
     </div>
   </section>
@@ -376,7 +440,9 @@ function icon(key,c){
    clock:`<circle cx="50" cy="52" r="30"/><path d="M50,52 V34"/><path d="M50,52 L65,61"/>`,
    screen:`<rect x="16" y="24" width="68" height="46" rx="5"/><path d="M40,70 v9 M60,70 v9 M33,82 h34"/><path d="M44,40 l-9,7 l9,7 M56,40 l9,7 l-9,7"/>`,
    magnifier:`<circle cx="45" cy="44" r="21"/><path d="M60,59 L80,79"/>`,
-   drone:`<rect x="42" y="45" width="16" height="12" rx="2"/><path d="M43,49 L26,36 M57,49 L74,36 M43,55 L26,70 M57,55 L74,70"/><ellipse cx="24" cy="34" rx="12" ry="4.5"/><ellipse cx="76" cy="34" rx="12" ry="4.5"/><ellipse cx="24" cy="72" rx="12" ry="4.5"/><ellipse cx="76" cy="72" rx="12" ry="4.5"/>`
+   drone:`<rect x="42" y="45" width="16" height="12" rx="2"/><path d="M43,49 L26,36 M57,49 L74,36 M43,55 L26,70 M57,55 L74,70"/><ellipse cx="24" cy="34" rx="12" ry="4.5"/><ellipse cx="76" cy="34" rx="12" ry="4.5"/><ellipse cx="24" cy="72" rx="12" ry="4.5"/><ellipse cx="76" cy="72" rx="12" ry="4.5"/>`,
+   gamepad:`<rect x="14" y="36" width="72" height="32" rx="16"/><path d="M31,44 v16 M23,52 h16"/><circle cx="66" cy="46" r="4" fill="${c}"/><circle cx="74" cy="56" r="4" fill="${c}"/>`,
+   pan:`<path d="M26,46 h48 v12 a15,15 0 0 1 -15,15 h-18 a15,15 0 0 1 -15,-15 Z"/><path d="M26,51 h-11 M74,51 h11"/><path d="M40,36 q3,-6 0,-11 M52,36 q3,-6 0,-11 M64,36 q3,-6 0,-11"/>`
   };
   return `<svg viewBox="0 0 100 100"><g ${s}>${M[key]||''}</g></svg>`;
 }
@@ -386,10 +452,13 @@ function icon(key,c){
   const items=[
     ['bulb',SKY,'Innovation Labs','Hands-on, project-based building'],
     ['screen',MINT,'AI Vibe Coding','Real tools, built with mentors'],
-    ['clock',SKY,'Hackathons','24–48hr community challenges'],
-    ['magnifier',MINT,'Beta Testing','Paid research with real cohorts'],
-    ['cap',SKY,'OXIE Academy','8–12 week mentored projects'],
-    ['drone',MINT,'Drone Football','Weekly STEM &amp; teamwork club']
+    ['gamepad',SKY,'Games &amp; Esports','From the pool table to competitive play'],
+    ['palette',MINT,'Art Corner','Innovative art classes and exhibits'],
+    ['pan',SKY,'Youth Kitchen','Cooking workshops &amp; food innovation'],
+    ['clock',MINT,'Hackathons','24–48hr community challenges'],
+    ['magnifier',SKY,'Beta Testing','Paid research with real cohorts'],
+    ['cap',MINT,'OXIE Academy','8–12 week mentored projects'],
+    ['drone',SKY,'Drone Football','Weekly STEM &amp; teamwork club']
   ];
   r.innerHTML=items.map(([k,c,l,sub])=>`<div><div class="iconcircle" style="border-color:${c}">${icon(k,c)}</div><div class="iconlabel">${l}</div><div class="iconsub">${sub}</div></div>`).join('');
 })();
