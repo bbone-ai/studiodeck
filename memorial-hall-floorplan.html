@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" class="exp-root">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Memorial Hall Studio — Interactive Studio Plan</title>
+<style>
+  :root{
+    --bg:oklch(0.985 0 0);--card:oklch(1 0 0);--fg:oklch(0.22 0.01 260);
+    --muted:oklch(0.55 0.01 260);--border:oklch(0.9 0.005 260);
+    --ring:oklch(0.55 0.13 250);--accent:oklch(0.55 0.13 250);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:oklch(0.2 0.01 260);--card:oklch(0.24 0.01 260);--fg:oklch(0.96 0 0);
+      --muted:oklch(0.7 0.01 260);--border:oklch(0.32 0.01 260);
+      --ring:oklch(0.7 0.13 250);--accent:oklch(0.7 0.13 250);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
+  #exp-app{position:relative;width:100%;height:100%;display:flex;flex-direction:column}
+  header.exp-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--card);z-index:80}
+  header.exp-bar h1{font-size:14px;font-weight:600;margin:0;letter-spacing:-0.01em}
+  header.exp-bar .exp-sub{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  header.exp-bar .exp-actions{margin-left:auto;display:flex;gap:8px}
+  .exp-btn{font-size:12px;font-weight:500;color:var(--fg);background:transparent;border:1px solid var(--border);border-radius:6px;padding:6px 10px;cursor:pointer}
+  .exp-btn:hover{border-color:var(--ring)}
+  #exp-stage{position:relative;flex:1;overflow:hidden;touch-action:none;cursor:grab}
+  #exp-stage.is-panning{cursor:grabbing}
+  #exp-world{position:absolute;left:0;top:0;width:920px;height:680px;transform-origin:0 0;
+    background:var(--card);
+    background-image:
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px),
+      linear-gradient(to right, color-mix(in oklch, var(--border), transparent 45%) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklch, var(--border), transparent 45%) 1px, transparent 1px);
+    background-size:100px 100px,100px 100px,20px 20px,20px 20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.15)}
+  #exp-world.is-animating{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+  /* Section highlight regions */
+  .exp-region{position:absolute;left:0;top:0;border-radius:8px;border:2px solid var(--accent);
+    background:color-mix(in oklch, var(--accent), transparent 88%);opacity:0;transition:opacity .4s ease;pointer-events:none;z-index:6}
+  .exp-region.is-active{opacity:1}
+  /* Object spotlight when a section is focused */
+  .exp-obj{transition:opacity .35s ease}
+  .exp-obj>div{transition:box-shadow .35s ease}
+  #exp-world.is-focused .exp-obj:not(.is-lit){opacity:.26}
+  #exp-world.is-focused .exp-obj.is-lit>div{box-shadow:0 0 0 2px var(--accent),0 0 16px color-mix(in oklch, var(--accent), transparent 42%)}
+  /* Section markers */
+  .exp-marker{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:9999px;border:1px solid var(--border);
+    background:color-mix(in oklch, var(--card), transparent 4%);color:var(--fg);font-size:11px;font-weight:600;cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,.12);white-space:nowrap;transition:transform .1s ease, box-shadow .2s ease, border-color .2s ease;backdrop-filter:blur(4px)}
+  .exp-marker:hover{border-color:var(--ring)}
+  .exp-marker .exp-marker-dot{width:8px;height:8px;border-radius:9999px;background:var(--accent);flex:none}
+  .exp-marker.is-active{border-color:var(--ring);box-shadow:0 0 0 3px color-mix(in oklch, var(--ring), transparent 78%)}
+  /* Active label lifted into screen space, gliding above its description */
+  .exp-marker.is-floating{transition:left .5s cubic-bezier(.22,.61,.36,1),top .5s cubic-bezier(.22,.61,.36,1),box-shadow .2s ease,border-color .2s ease}
+  /* Description panel — floats directly under the active label */
+  #exp-panel{position:absolute;left:0;top:0;z-index:90;width:min(320px,calc(100% - 24px));background:var(--card);
+    border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.28);padding:16px;
+    display:flex;flex-direction:column;gap:8px;opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .3s ease, transform .3s ease}
+  #exp-panel.is-open{opacity:1;pointer-events:auto;transform:translateY(0)}
+  #exp-panel h2{margin:0;font-size:16px;font-weight:650;letter-spacing:-0.01em;line-height:1.25;text-wrap:balance;padding-right:20px}
+  #exp-panel p{margin:0;font-size:13px;line-height:1.6;color:var(--muted);white-space:pre-wrap}
+  #exp-panel .exp-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  #exp-panel .exp-close{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;border:1px solid var(--border);
+    background:transparent;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center}
+  #exp-panel .exp-close:hover{color:var(--fg);border-color:var(--ring)}
+  /* Sections nav */
+  #exp-nav{position:absolute;top:16px;left:16px;z-index:85;background:color-mix(in oklch, var(--card), transparent 6%);border:1px solid var(--border);
+    border-radius:10px;padding:6px;max-width:220px;max-height:calc(100% - 32px);overflow:auto;backdrop-filter:blur(6px);box-shadow:0 4px 16px rgba(0,0,0,.12)}
+  #exp-nav .exp-nav-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:4px 8px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .exp-nav-item{display:block;width:100%;text-align:left;font-size:12px;color:var(--fg);background:transparent;border:none;border-radius:6px;padding:6px 8px;cursor:pointer}
+  .exp-nav-item:hover{background:color-mix(in oklch, var(--ring), transparent 88%)}
+  .exp-nav-item.is-active{background:color-mix(in oklch, var(--ring), transparent 82%);font-weight:600}
+  .exp-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:82;font-size:11px;color:var(--muted);
+    background:color-mix(in oklch, var(--card), transparent 8%);border:1px solid var(--border);border-radius:9999px;padding:5px 12px;backdrop-filter:blur(4px);pointer-events:none}
+  /* Zoom controls */
+  #exp-zoom{position:absolute;right:16px;bottom:16px;z-index:84;display:flex;flex-direction:column;gap:4px}
+  #exp-zoom button{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:color-mix(in oklch, var(--card), transparent 6%);
+    color:var(--fg);font-size:18px;line-height:1;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
+  #exp-zoom button:hover{border-color:var(--ring)}
+</style>
+</head>
+<body>
+<div id="exp-app">
+  <header class="exp-bar">
+    <div>
+      <h1>Memorial Hall Studio</h1>
+      <div class="exp-sub">Interactive Studio Plan · Target Venue</div>
+    </div>
+    <div class="exp-actions">
+      <button type="button" class="exp-btn" id="exp-reset">Reset view</button>
+    </div>
+  </header>
+  <div id="exp-stage">
+    <div id="exp-world">
+      
+      <div class="exp-region" data-index="0" style="width:110px;height:120px;transform:translate(290px,220px)"></div><div class="exp-region" data-index="1" style="width:100px;height:70px;transform:translate(290px,140px)"></div><div class="exp-region" data-index="2" style="width:100px;height:140px;transform:translate(290px,0px)"></div><div class="exp-region" data-index="3" style="width:230px;height:140px;transform:translate(390px,0px)"></div><div class="exp-region" data-index="4" style="width:190px;height:220px;transform:translate(430px,210px)"></div><div class="exp-region" data-index="5" style="width:70px;height:80px;transform:translate(290px,400px)"></div>
+      <div style="position:absolute;left:0;top:0;width:332.47137946598605px;height:6.649427589319722px;transform:translate(289.2039067393541px,140px) rotate(0deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:332.47137946598605px;height:6.649427589319722px;transform:translate(290px,620px) rotate(0deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:620px;height:10px;transform:translate(-22.471379465986097px,308.32471379465983px) rotate(90deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:620px;height:10px;transform:translate(310px,308.32471379465983px) rotate(90deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div class="exp-obj" data-cx="355.69818263255127" data-cy="209.81898968785708" title="Partition" style="position:absolute;left:0;top:0;width:66.49427589319723px;height:6.649427589319722px;transform:translate(322.45104468595264px,206.4942758931972px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.55 0.02 260 / 0.18);border:1.5px solid oklch(0.45 0.02 260);border-radius:4px;color:oklch(0.4 0.02 260)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.4 0.02 260)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M5 12h14"/></svg></span></div></div><div style="position:absolute;left:0;top:0;width:59.84484830387749px;height:6.649427589319722px;transform:translate(362.34761022187104px,173.24713794659863px) rotate(90deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:59.84484830387749px;height:6.649427589319722px;transform:translate(388.94532057915px,173.24713794659863px) rotate(90deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div class="exp-obj" data-cx="518.6091585708845" data-cy="209.81898968785708" title="Partition" style="position:absolute;left:0;top:0;width:192.83340009027194px;height:6.649427589319722px;transform:translate(422.1924585257484px,206.4942758931972px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.55 0.02 260 / 0.18);border:1.5px solid oklch(0.45 0.02 260);border-radius:4px;color:oklch(0.4 0.02 260)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.4 0.02 260)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M5 12h14"/></svg></span></div></div><div class="exp-obj" data-cx="510" data-cy="320" title="Inflatable Arena" style="position:absolute;left:0;top:0;width:180px;height:80px;transform:translate(420px,280px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.68 0.16 25 / 0.16);border:1.5px solid oklch(0.6 0.17 25);border-radius:9999px;color:oklch(0.5 0.17 25)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="oklch(0.5 0.17 25)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg></span></div></div><div class="exp-obj" data-cx="347" data-cy="365" title="Pool Table" style="position:absolute;left:0;top:0;width:54px;height:30px;transform:translate(320px,350px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.68 0.16 25 / 0.16);border:1.5px solid oklch(0.6 0.17 25);border-radius:4px;color:oklch(0.5 0.17 25)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="16.5" height="16.5" fill="none" stroke="oklch(0.5 0.17 25)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><circle cx="12" cy="12" r="10"/></svg></span></div></div><div class="exp-obj" data-cx="340" data-cy="70" title="Kitchen" style="position:absolute;left:0;top:0;width:100px;height:140px;transform:translate(290px,0px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.68 0.13 145 / 0.16);border:1.5px solid oklch(0.58 0.13 150);border-radius:4px;color:oklch(0.46 0.13 150)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="oklch(0.46 0.13 150)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M2 12h20"/><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="m4 8 16-4"/><path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8"/></svg></span></div></div><div class="exp-obj" data-cx="375" data-cy="454" title="Piano" style="position:absolute;left:0;top:0;width:30px;height:28px;transform:translate(360px,440px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.15 330 / 0.15);border:1.5px solid oklch(0.58 0.16 330);border-radius:4px;color:oklch(0.48 0.16 330)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="15.400000000000002" height="15.400000000000002" fill="none" stroke="oklch(0.48 0.16 330)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M18.5 8c-1.4 0-2.6-.8-3.2-2A6.87 6.87 0 0 0 2 9v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5C22 9.6 20.4 8 18.5 8"/><path d="M2 14h20"/><path d="M6 14v4"/><path d="M10 14v4"/><path d="M14 14v4"/><path d="M18 14v4"/></svg></span></div></div><div class="exp-obj" data-cx="505" data-cy="70" title="Art Corner" style="position:absolute;left:0;top:0;width:230px;height:140px;transform:translate(390px,0px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.15 330 / 0.15);border:1.5px solid oklch(0.58 0.16 330);border-radius:4px;color:oklch(0.48 0.16 330)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="oklch(0.48 0.16 330)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg></span></div></div><div style="position:absolute;left:0;top:0;width:40px;height:10px;transform:translate(270px,360px) rotate(270deg);transform-origin:center center;z-index:10;overflow:visible"><div style="position:relative;width:100%;height:100%;overflow:visible"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.9 0.02 90);border:1px solid oklch(0.55 0.03 90)"></div><svg width="40" height="40" viewBox="0 0 40 40" style="position:absolute;left:0;bottom:5px;overflow:visible;pointer-events:none"><path d="M0,40 L0,0 A 40 40 0 0 1 40,40" fill="color-mix(in oklch, oklch(0.7 0.03 90), transparent 88%)" stroke="oklch(0.5 0.03 90)" stroke-width="1"/></svg></div></div><div class="exp-obj" data-cx="392" data-cy="369" title="Couch" style="position:absolute;left:0;top:0;width:44px;height:18px;transform:translate(370px,360px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.7 0.11 60 / 0.18);border:1.5px solid oklch(0.62 0.12 60);border-radius:4px;color:oklch(0.5 0.12 60)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.5 0.12 60)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z"/><path d="M5 18v2"/><path d="M19 18v2"/></svg></span></div></div><div class="exp-obj" data-cx="304" data-cy="417" title="Desk + Computer" style="position:absolute;left:0;top:0;width:28px;height:14px;transform:translate(290px,410px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></span></div></div><div class="exp-obj" data-cx="304" data-cy="457" title="Desk + Computer" style="position:absolute;left:0;top:0;width:28px;height:14px;transform:translate(290px,450px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></span></div></div><div class="exp-obj" data-cx="332" data-cy="460" title="Printer" style="position:absolute;left:0;top:0;width:20px;height:20px;transform:translate(322px,450px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg></span></div></div><div class="exp-obj" data-cx="330" data-cy="250" title="Meeting / Dining Table" style="position:absolute;left:0;top:0;width:20px;height:20px;transform:translate(320px,240px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg></span></div></div><div class="exp-obj" data-cx="370" data-cy="250" title="Meeting / Dining Table" style="position:absolute;left:0;top:0;width:20px;height:20px;transform:translate(360px,240px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg></span></div></div><div class="exp-obj" data-cx="350" data-cy="300" title="Meeting / Dining Table" style="position:absolute;left:0;top:0;width:60px;height:20px;transform:translate(320px,290px) rotate(0deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(0deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg></span></div></div><div class="exp-obj" data-cx="300" data-cy="285" title="Bookshelf" style="position:absolute;left:0;top:0;width:100px;height:10px;transform:translate(250px,280px) rotate(270deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-270deg)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><rect width="8" height="18" x="3" y="3" rx="1"/><path d="M7 3v18"/><path d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z"/></svg></span></div></div><div style="position:absolute;left:0;top:0;width:18px;height:4px;transform:translate(400px,140px) rotate(0deg);transform-origin:center center;z-index:10;overflow:visible"><div style="position:relative;width:100%;height:100%;overflow:visible"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.9 0.02 90);border:1px solid oklch(0.55 0.03 90)"></div><svg width="18" height="18" viewBox="0 0 18 18" style="position:absolute;left:0;bottom:2px;overflow:visible;pointer-events:none"><path d="M0,18 L0,0 A 18 18 0 0 1 18,18" fill="color-mix(in oklch, oklch(0.7 0.03 90), transparent 88%)" stroke="oklch(0.5 0.03 90)" stroke-width="1"/></svg></div></div><div style="position:absolute;left:0;top:0;width:18px;height:4px;transform:translate(340px,140px) rotate(0deg);transform-origin:center center;z-index:10;overflow:visible"><div style="position:relative;width:100%;height:100%;overflow:visible"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.9 0.02 90);border:1px solid oklch(0.55 0.03 90)"></div><svg width="18" height="18" viewBox="0 0 18 18" style="position:absolute;left:0;bottom:2px;overflow:visible;pointer-events:none"><path d="M0,18 L0,0 A 18 18 0 0 1 18,18" fill="color-mix(in oklch, oklch(0.7 0.03 90), transparent 88%)" stroke="oklch(0.5 0.03 90)" stroke-width="1"/></svg></div></div><div class="exp-obj" data-cx="584" data-cy="261" title="Meeting / Dining Table" style="position:absolute;left:0;top:0;width:48px;height:22px;transform:translate(560px,250px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="12.100000000000001" height="12.100000000000001" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg></span></div></div><div class="exp-obj" data-cx="584" data-cy="311" title="Meeting / Dining Table" style="position:absolute;left:0;top:0;width:48px;height:22px;transform:translate(560px,300px) rotate(90deg);transform-origin:center center;z-index:10"><div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:oklch(0.62 0.09 195 / 0.18);border:1.5px solid oklch(0.55 0.09 200);border-radius:4px;color:oklch(0.45 0.09 200)"><span style="display:flex;align-items:center;justify-content:center;transform:rotate(-90deg)"><svg viewBox="0 0 24 24" width="12.100000000000001" height="12.100000000000001" fill="none" stroke="oklch(0.45 0.09 200)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg></span></div></div><div style="position:absolute;left:0;top:0;width:40px;height:10px;transform:translate(490px,620px) rotate(180deg);transform-origin:center center;z-index:10;overflow:visible"><div style="position:relative;width:100%;height:100%;overflow:visible"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.9 0.02 90);border:1px solid oklch(0.55 0.03 90)"></div><svg width="40" height="40" viewBox="0 0 40 40" style="position:absolute;left:0;bottom:5px;overflow:visible;pointer-events:none"><path d="M0,40 L0,0 A 40 40 0 0 1 40,40" fill="color-mix(in oklch, oklch(0.7 0.03 90), transparent 88%)" stroke="oklch(0.5 0.03 90)" stroke-width="1"/></svg></div></div><div style="position:absolute;left:0;top:0;width:130px;height:10px;transform:translate(330px,550px) rotate(90deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:110px;height:10px;transform:translate(290px,490px) rotate(180deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div><div style="position:absolute;left:0;top:0;width:332.47137946598605px;height:6.649427589319722px;transform:translate(290px,0px) rotate(0deg);transform-origin:center center;z-index:8"><div style="width:100%;height:100%;border-radius:2px;background:oklch(0.34 0.01 260);border:1px solid oklch(0.24 0.01 260)"></div></div>
+      <button type="button" class="exp-marker" data-index="0" data-cx="180" data-cy="220" data-rx="290" data-ry="220" data-rw="110" data-rh="120" data-title="Cafe/study area" data-body="Students can hang out, read, play board games, or study" style="position:absolute;left:0;top:0;transform:translate(180px,220px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Cafe/study area</span>
+  </button><button type="button" class="exp-marker" data-index="1" data-cx="180" data-cy="150" data-rx="290" data-ry="140" data-rw="100" data-rh="70" data-title="Cafe corner" data-body="Cafe is run by student volunteers. Food and snacks are donated from local businesses." style="position:absolute;left:0;top:0;transform:translate(180px,150px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Cafe corner</span>
+  </button><button type="button" class="exp-marker" data-index="2" data-cx="180" data-cy="0" data-rx="290" data-ry="0" data-rw="100" data-rh="140" data-title="Youth Kitchen (Pop-up)" data-body="Chemistry, Engineering, Maths, Physics, Biology, algorithmic recipes... Cooking is the most hands-on, full spectrum STEM field, through and through. Young people want to learn to cook sustainably and creatively. While it is an exciting time for innovation in the food and sustainability sector, young people&#39;s relationship with food is also a key pillar in their identity development. Cooking sessions also encourage friendships, self-sufficiency, and creativity for young people. Launches as pop-up cooking workshops ahead of September 2026, becoming regular provision once compliance and staffing requirements are met." style="position:absolute;left:0;top:0;transform:translate(180px,0px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Youth Kitchen (Pop-up)</span>
+  </button><button type="button" class="exp-marker" data-index="3" data-cx="620" data-cy="0" data-rx="390" data-ry="0" data-rw="230" data-rh="140" data-title="Art Corner" data-body="Upcycling recycled clothes, mark making, collaging... this is the place where you can get out of your head and into your body." style="position:absolute;left:0;top:0;transform:translate(620px,0px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Art Corner</span>
+  </button><button type="button" class="exp-marker" data-index="4" data-cx="630" data-cy="210" data-rx="430" data-ry="210" data-rw="190" data-rh="220" data-title="Drone Football" data-body="Drone Football training, engineering stations, DIY robotics and drones safely tested in the arena." style="position:absolute;left:0;top:0;transform:translate(630px,210px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Drone Football</span>
+  </button><button type="button" class="exp-marker" data-index="5" data-cx="180" data-cy="400" data-rx="290" data-ry="400" data-rw="70" data-rh="80" data-title="Coding Corner (Pop-up)" data-body="Computers, cyberdecks, this is where students who don&#39;t learn in traditional classroom settings can become vibecode their way to being AI architects. Launches as pop-up coding workshops ahead of September 2026, becoming regular provision once compliance and staffing requirements are met." style="position:absolute;left:0;top:0;transform:translate(180px,400px);z-index:60">
+    <span class="exp-marker-dot" aria-hidden="true"></span>
+    <span class="exp-marker-label">Coding Corner (Pop-up)</span>
+  </button>
+    </div>
+    <nav id="exp-nav"><div class="exp-nav-title">Sections</div><button type="button" class="exp-nav-item" data-index="0">Cafe/study area</button><button type="button" class="exp-nav-item" data-index="1">Cafe corner</button><button type="button" class="exp-nav-item" data-index="2">Youth Kitchen (Pop-up)</button><button type="button" class="exp-nav-item" data-index="3">Art Corner</button><button type="button" class="exp-nav-item" data-index="4">Drone Football</button><button type="button" class="exp-nav-item" data-index="5">Coding Corner (Pop-up)</button></nav>
+    <div id="exp-zoom">
+      <button type="button" id="exp-zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="exp-zoom-out" aria-label="Zoom out">&minus;</button>
+    </div>
+    <div class="exp-hint">Click a section label to explore &middot; drag to pan &middot; use +/&minus; to zoom</div>
+    <aside id="exp-panel" aria-live="polite">
+      <button type="button" class="exp-close" id="exp-close" aria-label="Close">&times;</button>
+      <div class="exp-eyebrow">Section</div>
+      <h2 id="exp-panel-title"></h2>
+      <p id="exp-panel-body"></p>
+    </aside>
+  </div>
+</div>
+<script>
+(function(){
+  var WORLD_W=920, WORLD_H=680;
+  var stage=document.getElementById("exp-stage");
+  var world=document.getElementById("exp-world");
+  var panel=document.getElementById("exp-panel");
+  var pTitle=document.getElementById("exp-panel-title");
+  var pBody=document.getElementById("exp-panel-body");
+  var markers=[].slice.call(document.querySelectorAll(".exp-marker"));
+  var navItems=[].slice.call(document.querySelectorAll(".exp-nav-item"));
+  var regions=[].slice.call(document.querySelectorAll(".exp-region"));
+  var objs=[].slice.call(document.querySelectorAll(".exp-obj"));
+  var hint=document.querySelector(".exp-hint");
+  var activeIndex=null;
+  var floatingMarker=null;
+  var view={s:1,tx:0,ty:0};
+
+  function fitScale(){
+    var r=stage.getBoundingClientRect();
+    return Math.min(r.width/WORLD_W, r.height/WORLD_H)*0.94;
+  }
+  function clampScale(s){ return Math.max(fitScale()*0.5, Math.min(s, fitScale()*10)); }
+  function render(animate){
+    world.classList.toggle("is-animating", !!animate);
+    world.style.transform="translate("+view.tx+"px,"+view.ty+"px) scale("+view.s+")";
+    if(activeIndex!=null) layout();
+  }
+  function fit(){
+    var r=stage.getBoundingClientRect();
+    view.s=fitScale();
+    view.tx=(r.width-WORLD_W*view.s)/2;
+    view.ty=(r.height-WORLD_H*view.s)/2;
+    render(true);
+  }
+  function num(v){ var n=parseFloat(v); return isNaN(n)?null:n; }
+  // Returns the label box, the highlight region (if any), and the union
+  // "fit" box (world px). Fitting the union keeps the label on-screen even
+  // when it sits outside its region.
+  function boxes(m){
+    var lx=num(m.getAttribute("data-cx")), ly=num(m.getAttribute("data-cy"));
+    var lw=m.offsetWidth, lh=m.offsetHeight;
+    var label={x:lx,y:ly,w:lw,h:lh};
+    var rx=num(m.getAttribute("data-rx"));
+    if(rx!=null){
+      var reg={x:rx,y:num(m.getAttribute("data-ry")),w:num(m.getAttribute("data-rw")),h:num(m.getAttribute("data-rh"))};
+      var minx=Math.min(lx,reg.x), miny=Math.min(ly,reg.y);
+      var maxx=Math.max(lx+lw,reg.x+reg.w), maxy=Math.max(ly+lh,reg.y+reg.h);
+      return {label:label, region:reg, hasRegion:true, fit:{x:minx,y:miny,w:maxx-minx,h:maxy-miny}};
+    }
+    return {label:label, region:null, hasRegion:false, fit:{x:lx-60,y:ly-40,w:lw+120,h:lh+90}};
+  }
+  // Vertical gaps for the stacked [label] / [description] / (region) layout.
+  var TOP_MARGIN=14, GAP_LABEL_PANEL=6, GAP_PANEL_REGION=14, BOTTOM_MARGIN=18;
+  function focusIndex(i){
+    var m=markers[i]; if(!m) return;
+    var r=stage.getBoundingClientRect();
+    var b=boxes(m);
+    // Open first so the panel + floated label have measurable sizes.
+    openPanel(i);
+    lightUp(i, b);
+    var ph=panel.offsetHeight;
+    var lh=floatingMarker?floatingMarker.offsetHeight:26;
+    // Height reserved above the region for the label + description stack.
+    var stack=TOP_MARGIN+lh+GAP_LABEL_PANEL+ph+GAP_PANEL_REGION;
+    if(b.hasRegion){
+      var reg=b.region;
+      var availH=Math.max(80, r.height-stack-BOTTOM_MARGIN);
+      var availW=r.width*0.74;
+      view.s=clampScale(Math.min(availW/reg.w, availH/reg.h));
+      view.tx=r.width/2 - (reg.x+reg.w/2)*view.s;
+      // Push the region down so its TOP sits just below the reserved stack.
+      view.ty=stack - reg.y*view.s;
+    } else {
+      // No region: zoom on the label and leave room for the panel below it.
+      view.s=clampScale(fitScale()*2.2);
+      var lx=num(m.getAttribute("data-cx")), ly=num(m.getAttribute("data-cy"));
+      view.tx=r.width/2 - lx*view.s;
+      view.ty=stack - ly*view.s;
+    }
+    render(true);
+  }
+  function lightUp(i, b){
+    regions.forEach(function(rg){ rg.classList.toggle("is-active", num(rg.getAttribute("data-index"))===i); });
+    if(b && b.hasRegion){
+      var reg=b.region;
+      world.classList.add("is-focused");
+      objs.forEach(function(o){
+        var ox=num(o.getAttribute("data-cx")), oy=num(o.getAttribute("data-cy"));
+        var inside=ox>=reg.x && ox<=reg.x+reg.w && oy>=reg.y && oy<=reg.y+reg.h;
+        o.classList.toggle("is-lit", inside);
+      });
+    } else {
+      world.classList.remove("is-focused");
+      objs.forEach(function(o){ o.classList.remove("is-lit"); });
+    }
+  }
+  // Lift a marker out of the (scaled) world into screen space so it can glide
+  // to a fixed spot above the description panel.
+  function floatMarker(m){
+    unfloatMarker();
+    var sr=stage.getBoundingClientRect();
+    var mr=m.getBoundingClientRect();
+    m.style.position="absolute";
+    m.style.left=(mr.left-sr.left)+"px";
+    m.style.top=(mr.top-sr.top)+"px";
+    m.style.transform="none";
+    m.style.zIndex="95";
+    m.classList.add("is-floating");
+    stage.appendChild(m);
+    floatingMarker=m;
+  }
+  function unfloatMarker(){
+    if(!floatingMarker) return;
+    var m=floatingMarker;
+    m.classList.remove("is-floating");
+    m.style.position="absolute";
+    m.style.left="0"; m.style.top="0"; m.style.zIndex="60";
+    m.style.transform="translate("+num(m.getAttribute("data-cx"))+"px,"+num(m.getAttribute("data-cy"))+"px)";
+    world.appendChild(m);
+    floatingMarker=null;
+  }
+  function openPanel(i){
+    activeIndex=i;
+    var m=markers[i];
+    pTitle.textContent=m.getAttribute("data-title")||"Untitled section";
+    var body=m.getAttribute("data-body")||"";
+    pBody.textContent=body;
+    pBody.style.display=body?"block":"none";
+    panel.classList.add("is-open");
+    markers.forEach(function(x,j){ x.classList.toggle("is-active", j===i); });
+    navItems.forEach(function(x,j){ x.classList.toggle("is-active", j===i); });
+    if(hint) hint.style.display="none";
+    floatMarker(m);
+  }
+  // Stack the floated label directly above the description panel, with the
+  // panel's bottom edge held above the highlighted region so it never covers it.
+  function layout(){
+    if(activeIndex==null) return;
+    var m=markers[activeIndex];
+    var r=stage.getBoundingClientRect();
+    var pw=panel.offsetWidth, ph=panel.offsetHeight;
+    var anchorX, anchorTop;
+    var rx=num(m.getAttribute("data-rx"));
+    if(rx!=null){
+      anchorX=view.tx+(rx+num(m.getAttribute("data-rw"))/2)*view.s;
+      anchorTop=view.ty+num(m.getAttribute("data-ry"))*view.s;
+    } else {
+      var lx=num(m.getAttribute("data-cx")), ly=num(m.getAttribute("data-cy"));
+      anchorX=view.tx+lx*view.s;
+      anchorTop=view.ty+ly*view.s;
+    }
+    // Panel sits above the region top, horizontally centered on it.
+    var panelLeft=Math.max(8, Math.min(anchorX-pw/2, r.width-pw-8));
+    var panelTop=Math.max(8, anchorTop-GAP_PANEL_REGION-ph);
+    panel.style.left=panelLeft+"px";
+    panel.style.top=panelTop+"px";
+    // Floated label glides just above the panel.
+    if(floatingMarker){
+      var lw=floatingMarker.offsetWidth, lh=floatingMarker.offsetHeight;
+      floatingMarker.style.left=Math.max(8, Math.min(anchorX-lw/2, r.width-lw-8))+"px";
+      floatingMarker.style.top=Math.max(8, panelTop-GAP_LABEL_PANEL-lh)+"px";
+    }
+  }
+  function closePanel(){
+    activeIndex=null;
+    unfloatMarker();
+    panel.classList.remove("is-open");
+    world.classList.remove("is-focused");
+    objs.forEach(function(o){ o.classList.remove("is-lit"); });
+    regions.forEach(function(rg){ rg.classList.remove("is-active"); });
+    markers.forEach(function(x){ x.classList.remove("is-active"); });
+    navItems.forEach(function(x){ x.classList.remove("is-active"); });
+    if(hint) hint.style.display="";
+  }
+  function zoomAt(px,py,factor){
+    var ns=clampScale(view.s*factor);
+    var k=ns/view.s;
+    view.tx=px-(px-view.tx)*k;
+    view.ty=py-(py-view.ty)*k;
+    view.s=ns;
+    render(false);
+  }
+
+  markers.forEach(function(m,i){ m.addEventListener("click", function(e){ e.stopPropagation(); focusIndex(i); }); });
+  navItems.forEach(function(n,i){ n.addEventListener("click", function(e){ e.stopPropagation(); focusIndex(i); }); });
+  document.getElementById("exp-close").addEventListener("click", function(){ closePanel(); fit(); });
+  document.getElementById("exp-reset").addEventListener("click", function(){ closePanel(); fit(); });
+  window.addEventListener("keydown", function(e){ if(e.key==="Escape"){ closePanel(); fit(); } });
+
+  document.getElementById("exp-zoom-in").addEventListener("click", function(){
+    var r=stage.getBoundingClientRect(); zoomAt(r.width/2, r.height/2, 1.25);
+  });
+  document.getElementById("exp-zoom-out").addEventListener("click", function(){
+    var r=stage.getBoundingClientRect(); zoomAt(r.width/2, r.height/2, 0.8);
+  });
+  // Pointer drag to pan.
+  var dragging=false, moved=false, sx=0, sy=0, stx=0, sty=0, pid=null;
+  stage.addEventListener("pointerdown", function(e){
+    if(e.target.closest(".exp-marker")||e.target.closest("#exp-nav")||e.target.closest("#exp-panel")||e.target.closest("#exp-zoom")) return;
+    dragging=true; moved=false; pid=e.pointerId;
+    sx=e.clientX; sy=e.clientY; stx=view.tx; sty=view.ty;
+    stage.classList.add("is-panning");
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  stage.addEventListener("pointermove", function(e){
+    if(!dragging) return;
+    var dx=e.clientX-sx, dy=e.clientY-sy;
+    if(Math.abs(dx)+Math.abs(dy)>3) moved=true;
+    view.tx=stx+dx; view.ty=sty+dy;
+    render(false);
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging=false;
+    stage.classList.remove("is-panning");
+    try{ stage.releasePointerCapture(pid); }catch(_){}
+  }
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+  stage.addEventListener("click", function(e){
+    if(moved) return;
+    if(e.target===stage||e.target===world){ closePanel(); }
+  });
+
+  var rt;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt=setTimeout(function(){ if(activeIndex!=null) focusIndex(activeIndex); else fit(); }, 120);
+  });
+  fit();
+})();
+</script>
+</body>
+</html>
