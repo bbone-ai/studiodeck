@@ -89,6 +89,11 @@ strong{ font-weight:700; color:var(--ink); }
 .statpop{ position:absolute; bottom:calc(100% + 14px); right:0; width:min(340px,72vw); background:var(--bg); border:1.5px solid var(--accent-soft); border-radius:14px; padding:16px 19px; font-size:14.5px; line-height:1.55; color:var(--ink); font-weight:500; box-shadow:0 18px 44px rgba(20,45,75,.28); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .3s, transform .3s; z-index:6; text-align:left; }
 .statpop::after{ content:''; position:absolute; top:100%; right:34px; border:9px solid transparent; border-top-color:var(--accent-soft); }
 .stat.pulse:hover .statpop, .stat.pulse:focus-within .statpop{ opacity:1; transform:none; }
+.iconrow > div.wexp{ position:relative; cursor:pointer; }
+.iconrow > div.wexp .iconcircle{ animation:pulseGlow 2.2s ease-in-out infinite; box-shadow:0 0 0 rgba(var(--spot-2),0); }
+.iconrow > div.wexp .statpop{ right:auto; left:50%; transform:translate(-50%,10px); width:max-content; max-width:240px; text-align:center; font-weight:700; }
+.iconrow > div.wexp .statpop::after{ right:auto; left:50%; margin-left:-9px; }
+.iconrow > div.wexp:hover .statpop, .iconrow > div.wexp:focus-within .statpop{ opacity:1; transform:translate(-50%,0); }
 .iconrow{ display:grid; grid-template-columns:repeat(var(--cols,4),1fr); gap:clamp(14px,1.8vw,30px); justify-items:center; }
 .iconrow > div{ display:flex; flex-direction:column; align-items:center; text-align:center; }
 .iconcircle{ width:clamp(64px,7vw,104px); height:clamp(64px,7vw,104px); border-radius:50%; background:#ffffff; border:2.5px solid; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(20,45,75,.10); }
@@ -185,6 +190,56 @@ strong{ font-weight:700; color:var(--ink); }
     </div>
   </section>
 
+  <!-- 4a · WHO WE ARE -->
+  <section class="slide center-bg" data-name="Who We Are">
+    <div class="tag">Who we are</div><div class="num"></div>
+    <div style="max-width:1120px; margin:0 auto; text-align:center;">
+      <div class="eyebrow reveal" style="margin:0 auto;">Our identity</div>
+      <h2 class="reveal d1" style="margin:.3rem auto 0;">Who we are</h2>
+      <div class="people reveal d2" style="--cols:3; margin-top:1.6rem; text-align:left;">
+        <div class="glass person"><div class="pn">In one sentence</div><div class="pr">An afterschool space where young people aged 12–25 rediscover themselves and become the architects of their own futures.</div></div>
+        <div class="glass person"><div class="pn">Our mission</div><div class="pr">To build and scale physical innovation spaces for young people aged 12–25, creating pathways into entrepreneurship, tech careers, and civic leadership through hands-on, mentor-supported programmes and events that connect young people to real problems and real opportunities.</div></div>
+        <div class="glass person"><div class="pn">Our vision</div><div class="pr">To build spaces where every young person has a place to rediscover who they are, lead with confidence, and build the future on their own terms.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4c · KEY MESSAGING PILLARS -->
+  <section class="slide center-bg" data-name="Messaging Pillars">
+    <div class="tag">What we stand for</div><div class="num"></div>
+    <div style="max-width:1120px; margin:0 auto; text-align:center;">
+      <div class="eyebrow reveal" style="margin:0 auto;">Our messaging</div>
+      <h2 class="reveal d1" style="margin:.3rem auto 0;">Key messaging pillars</h2>
+      <div class="people reveal d2" style="--cols:4; margin-top:1.6rem; text-align:left;">
+        <div class="glass person"><div class="pn">Creating Youth Innovation Pathways</div><div class="pr">The Studio hosts weekly programmes, pop-up workshops, and research academies with links to real cross-sector opportunities.</div></div>
+        <div class="glass person"><div class="pn">Redefining Innovation for the Next Generation</div><div class="pr">Innovation isn't just AI and deep tech. It's fashion, food, education, politics, and every other pioneering way to improve the world around us.</div></div>
+        <div class="glass person"><div class="pn">Identity before industry</div><div class="pr">Every young person deserves a space to rediscover who they are and lead with confidence. Future innovators must be free-thinking, creative, critically minded, multi-disciplined visionaries.</div></div>
+        <div class="glass person"><div class="pn">Play. Learn. Lead.</div><div class="pr">OXIE builds youth innovation pathways on three pillars. Play: the entry point to engagement and critical thinking. Learn: discussion groups and workshops. Lead: peer support, research academies, and in-house leadership.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · THE PROGRAMMES -->
+  <section class="slide" data-name="Programmes">
+    <div class="tag">What happens inside</div><div class="num"></div>
+    <div style="max-width:1160px;">
+      <div class="eyebrow reveal">The programmes</div>
+      <h2 class="reveal d1" style="max-width:26ch;">Where ideas become reality</h2>
+      <div class="two top" style="margin-top:1.5rem; grid-template-columns:1.55fr 1fr; gap:clamp(28px,3.4vw,52px);">
+        <div>
+          <div class="eyebrow reveal d2" style="color:var(--accent-soft); letter-spacing:.14em;">Studio Corners</div>
+          <p class="tiny reveal d2" style="max-width:52ch; margin:.25rem 0 0;">The Studio's everyday spaces: no sign-up, no commitment, just walk in.</p>
+          <div class="iconrow reveal d2" style="--cols:3; margin:1.1rem 0 0;" id="iconrow-corners"></div>
+        </div>
+        <div>
+          <div class="eyebrow reveal d3" style="color:var(--accent-soft); letter-spacing:.14em;">Structured Programmes</div>
+          <p class="tiny reveal d3" style="max-width:44ch; margin:.25rem 0 0;">Scheduled, mentor-led, and built around real problems, real partners, and real outputs.</p>
+          <div class="iconrow reveal d3" style="--cols:2; margin:1.1rem 0 0;" id="iconrow-structured"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 3a · GROUND ZERO — CHARLBURY -->
   <section class="slide center-bg" data-name="Charlbury">
     <div class="tag">Ground zero</div><div class="num"></div>
@@ -244,7 +299,7 @@ strong{ font-weight:700; color:var(--ink); }
       <h2 class="reveal d1" style="max-width:26ch;">A Youth Innovation Studio is like a sandbox</h2>
       <div class="two top" style="margin-top:1.2rem;">
         <div>
-          <p class="small reveal d2" style="max-width:58ch;">It reframes innovation not just as AI and apps: the food industry is being innovated upon with sustainability, from smart farming to zero-waste restaurants. Fashion is being innovated upon with bio-engineered leather and upcycling. The Studio includes leadership sessions and book clubs, because future innovators must be free thinking, creative, critically minded, multi-disciplined visionaries.</p>
+          <p class="small reveal d2" style="max-width:58ch;">It reframes innovation not just as AI and apps: the food industry is being innovated upon with sustainability — zero-waste restaurants and festivals. Fashion is being innovated upon with bio-engineered leather and upcycling. The Studio includes leadership sessions and book clubs, because future innovators must be free thinking, creative, critically minded, multi-disciplined visionaries.</p>
           <p class="lede reveal d3" style="margin-top:1.2rem;"><em>Not just tech savvy.</em></p>
         </div>
         <div class="reveal d3" style="align-self:center;">
@@ -254,23 +309,13 @@ strong{ font-weight:700; color:var(--ink); }
     </div>
   </section>
 
-  <!-- 5 · THE MENU -->
-  <section class="slide center-bg" data-name="Programmes">
-    <div class="tag">What happens inside</div><div class="num"></div>
-    <div style="max-width:1040px; margin:0 auto; text-align:center;">
-      <div class="eyebrow reveal" style="margin:0 auto;">The programmes</div>
-      <h2 class="reveal d1" style="margin:.3rem auto 0;">Where ideas become reality</h2>
-      <div class="iconrow reveal d2" style="--cols:3; margin:2rem auto 0; max-width:880px;" id="iconrow"></div>
-    </div>
-  </section>
-
   <!-- 6 · BETA TESTING AS A BUSINESS MODEL -->
   <section class="slide" data-name="Revenue Engine">
     <div class="tag">The commercial edge</div><div class="num"></div>
     <div class="two top">
       <div>
         <div class="eyebrow reveal">Beta testing as a business model</div>
-        <h2 class="reveal d1" style="max-width:18ch;">OXIE's Research Academy</h2>
+        <h2 class="reveal d1" style="max-width:18ch;">OXIE Research Academy</h2>
         <p class="lede reveal d2" style="margin-top:1.1rem;">Young people's insight is commercially valuable. EdTech companies and technology organisations pay to access Studio cohorts as research participants and product testers — <em>one of the most significant and underexploited revenue streams in the youth sector.</em></p>
       </div>
       <div class="reveal d2" style="align-self:center;">
@@ -289,7 +334,7 @@ strong{ font-weight:700; color:var(--ink); }
     <div style="max-width:1080px; margin:0 auto; text-align:center;">
       <h2 class="reveal d1">One space, four audiences</h2>
       <div class="people reveal d2" style="--cols:4; margin-top:1.6rem; text-align:left;">
-        <div class="glass person"><div class="pn">Young people, 16–25</div><div class="eyebrow" style="margin:.4rem 0 .5rem;">Primary beneficiaries</div><div class="pr">Particularly those from disadvantaged backgrounds and those not in education, employment, or training. Free or heavily subsidised.</div></div>
+        <div class="glass person"><div class="pn">Young people, 12–25</div><div class="eyebrow" style="margin:.4rem 0 .5rem;">Primary beneficiaries</div><div class="pr">Particularly those from disadvantaged backgrounds and those not in education, employment, or training. Free or heavily subsidised.</div></div>
         <div class="glass person"><div class="pn">EdTech &amp; tech</div><div class="eyebrow" style="margin:.4rem 0 .5rem;">Beta partners</div><div class="pr">Companies that need credible, ethical, genuinely useful research from the generation using their tools.</div></div>
         <div class="glass person"><div class="pn">Corporate sponsors</div><div class="eyebrow" style="margin:.4rem 0 .5rem;">Community impact</div><div class="pr">Brands seeking genuine impact and reach to a young, diverse, engaged audience. Naming rights and programme sponsorship.</div></div>
         <div class="glass person"><div class="pn">Funders &amp; councils</div><div class="eyebrow" style="margin:.4rem 0 .5rem;">Place-based change</div><div class="pr">Arts Council, National Lottery, DCMS and local authorities funding inclusion, NEET reduction, and innovation.</div></div>
@@ -310,26 +355,6 @@ strong{ font-weight:700; color:var(--ink); }
       </div>
     </div>
   </section>
-  <!-- 13 · THE ASK -->
-  <section class="slide" data-name="The Ask">
-    <div class="tag">The investment</div><div class="num"></div>
-    <div class="two top">
-      <div>
-        <div class="eyebrow reveal">The ask · a staged funding strategy</div>
-        <div class="bigroi reveal d1">£7,488</div>
-        <p class="lede reveal d2" style="margin-top:.6rem; max-width:36ch;">Urgently needed by 31 August 2026 to open Charlbury Memorial Hall (target venue): the venue hire and a youth worker in training.</p>
-        <p class="tiny reveal d3" style="margin-top:1rem; max-width:44ch;">Then a September–December crowdfunding and grant campaign for the remaining £82,500 in year-one costs, before a joint fundraise for a target permanent base at Oxford North from 2027/28. Year-one Charlbury pilot budget: £90,000 all-in. Detailed budget available on request.</p>
-      </div>
-      <div class="reveal d2" style="align-self:center;">
-        <div class="glass">
-          <div class="pillar"><div class="eyebrow" style="color:var(--accent-soft);">Now · by 31 August 2026</div><div class="k">Urgent: open Charlbury Memorial Hall (target venue)</div><div class="small">Venue hire (£4,032) and a youth worker in training (£3,456) — £7,488 to unlock the September pilot.</div></div>
-          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">September–December 2026</div><div class="k">Crowdfunding &amp; grants</div><div class="small">A public campaign for the remaining £82,500 in year-one costs: equipment, a qualified youth counsellor, an OXIE Academy camp, Youth Kitchen workshops, the Studio Director, events and workshops, and overhead (marketing, compliance, accounting).</div></div>
-          <div class="pillar" style="margin-top:1.2rem;"><div class="eyebrow" style="color:var(--accent-soft);">2027/28</div><div class="k">Target: permanent Oxford North base</div><div class="small">Conditional on an Oxfordshire-wide fundraise — a permanent location and office at Oxford North (venue to be confirmed), with Oxford North and Oxfordshire Youth already expressing interest in scaling the venture.</div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- 14b · SUSTAINABLE CHARLBURY — TIERED ASK -->
   <section class="slide" data-name="Sustainable Charlbury">
     <div class="tag">The investment · Sustainable Charlbury</div><div class="num"></div>
@@ -355,7 +380,7 @@ strong{ font-weight:700; color:var(--ink); }
           <div class="eyebrow">High · cumulative</div>
           <div class="k" style="font-size:clamp(26px,2.6vw,38px);">£19,228</div>
           <div class="small" style="margin:.4rem 0 .8rem;">Everything in Medium, plus:</div>
-          <div class="askline"><span>OXIE Academy camp with DiversITy Talent</span><span class="amt">£3,000</span></div>
+          <div class="askline"><span>OXIE Venture Academy camp with DiversITy Talent</span><span class="amt">£3,000</span></div>
           <div class="askline"><span>Youth Kitchen workshops — 12 × £400</span><span class="amt">£4,800</span></div>
         </div>
       </div>
@@ -375,6 +400,24 @@ strong{ font-weight:700; color:var(--ink); }
       <div class="glass person"><div class="avatar">DA</div><div class="pn">Dianne Augustine</div><div class="eyebrow" style="margin:.3rem 0 .4rem;">Safeguarding Governance Lead</div><div class="pr">Leads safeguarding governance and policy across the Studio, ensuring every programme meets best-practice standards for working with young people.</div></div>
       <div class="glass person"><div class="avatar">NK</div><div class="pn">Nick Kowalski</div><div class="eyebrow" style="margin:.3rem 0 .4rem;">Drone Football Board Advisor</div><div class="pr">Autonomous systems engineer at UAVTEK and co-founder of Celestial Labs. Advises on the Drone Football programme and its STEM pathway.</div></div>
       <div class="glass person"><div class="avatar">HL</div><div class="pn">Heidi Leyland</div><div class="eyebrow" style="margin:.3rem 0 .4rem;">Studio Assistant</div><div class="pr">18 years old, beginning her Youth Work diploma in August 2026, with 1.5 years' experience assisting and volunteering alongside Bryanna.</div></div>
+    </div>
+  </section>
+
+  <!-- 15b · PARTNERS & FUNDERS -->
+  <section class="slide center-bg" data-name="Partners">
+    <div class="tag">Who's with us</div><div class="num"></div>
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+      <div class="eyebrow reveal" style="margin:0 auto;">Our network</div>
+      <h2 class="reveal d1" style="margin:.3rem auto 0;">Our partners &amp; funders</h2>
+      <div class="reveal d2" style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:2rem;">
+        <span class="chip" style="font-size:15px; padding:11px 22px;">DiversITy Talent</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px;">Cottsway Housing</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px;">Charlbury Beer Festival</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px;">Wilderness Festival</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px;">West Oxfordshire Youth Partnership</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px;">180 Degrees Consulting — Oxford University Branch</span>
+        <span class="chip" style="font-size:15px; padding:11px 22px; color:var(--muted70); border-style:dashed;">and more</span>
+      </div>
     </div>
   </section>
 
@@ -442,25 +485,30 @@ function icon(key,c){
    magnifier:`<circle cx="45" cy="44" r="21"/><path d="M60,59 L80,79"/>`,
    drone:`<rect x="42" y="45" width="16" height="12" rx="2"/><path d="M43,49 L26,36 M57,49 L74,36 M43,55 L26,70 M57,55 L74,70"/><ellipse cx="24" cy="34" rx="12" ry="4.5"/><ellipse cx="76" cy="34" rx="12" ry="4.5"/><ellipse cx="24" cy="72" rx="12" ry="4.5"/><ellipse cx="76" cy="72" rx="12" ry="4.5"/>`,
    gamepad:`<rect x="14" y="36" width="72" height="32" rx="16"/><path d="M31,44 v16 M23,52 h16"/><circle cx="66" cy="46" r="4" fill="${c}"/><circle cx="74" cy="56" r="4" fill="${c}"/>`,
-   pan:`<path d="M26,46 h48 v12 a15,15 0 0 1 -15,15 h-18 a15,15 0 0 1 -15,-15 Z"/><path d="M26,51 h-11 M74,51 h11"/><path d="M40,36 q3,-6 0,-11 M52,36 q3,-6 0,-11 M64,36 q3,-6 0,-11"/>`
+   pan:`<path d="M26,46 h48 v12 a15,15 0 0 1 -15,15 h-18 a15,15 0 0 1 -15,-15 Z"/><path d="M26,51 h-11 M74,51 h11"/><path d="M40,36 q3,-6 0,-11 M52,36 q3,-6 0,-11 M64,36 q3,-6 0,-11"/>`,
+   coffee:`<path d="M24,44 h44 v14 a18,18 0 0 1 -18,18 h-8 a18,18 0 0 1 -18,-18 Z"/><path d="M68,48 h8 a9,9 0 0 1 0,18 h-8"/><path d="M35,34 q3,-6 0,-12 M46,34 q3,-6 0,-12 M57,34 q3,-6 0,-12"/>`
   };
   return `<svg viewBox="0 0 100 100"><g ${s}>${M[key]||''}</g></svg>`;
 }
-/* Programme icon grid */
-(function(){ const r=document.getElementById('iconrow'); if(!r) return;
+/* Programme icon grids — Studio Corners + Structured Programmes */
+(function(){
   const SKY='#15D3FC', MINT='#64E193';
-  const items=[
-    ['bulb',SKY,'Innovation Labs','Hands-on, project-based building'],
-    ['screen',MINT,'AI Vibe Coding','Real tools, built with mentors'],
-    ['gamepad',SKY,'Games &amp; Esports','From the pool table to competitive play'],
-    ['palette',MINT,'Art Corner','Innovative art classes and exhibits'],
-    ['pan',SKY,'Youth Kitchen','Cooking workshops &amp; food innovation'],
-    ['clock',MINT,'Hackathons','24–48hr community challenges'],
-    ['magnifier',SKY,'Beta Testing','Paid research with real cohorts'],
-    ['cap',MINT,'OXIE Academy','8–12 week mentored projects'],
-    ['drone',SKY,'Drone Football','Weekly STEM &amp; teamwork club']
-  ];
-  r.innerHTML=items.map(([k,c,l,sub])=>`<div><div class="iconcircle" style="border-color:${c}">${icon(k,c)}</div><div class="iconlabel">${l}</div><div class="iconsub">${sub}</div></div>`).join('');
+  const render=(id,items)=>{ const r=document.getElementById(id); if(!r) return;
+    r.innerHTML=items.map(([k,c,l,sub,pop])=>`<div${pop?' class="wexp" tabindex="0"':''}><div class="iconcircle" style="border-color:${c}">${icon(k,c)}</div><div class="iconlabel">${l}</div><div class="iconsub">${sub}</div>${pop?`<div class="statpop">${pop}</div>`:''}</div>`).join(''); };
+  render('iconrow-corners',[
+    ['screen',SKY,'Coding Corner','AI-assisted &amp; vibe coding'],
+    ['book',MINT,'Study Corner','Cafe-style solo &amp; group work'],
+    ['palette',SKY,'Art Corner','Upcycling &amp; art therapy'],
+    ['pan',MINT,'Youth Kitchen','Cooking as hands-on STEM'],
+    ['gamepad',SKY,'Games Corner','Pool, books &amp; board games'],
+    ['coffee',MINT,'Cafe Corner','Student-run community cafe']
+  ]);
+  render('iconrow-structured',[
+    ['magnifier',SKY,'OXIE Research Academy','Research projects for real organisations','Qualified work experience'],
+    ['cap',MINT,'OXIE Venture Academy','8–12 week mentored builds','Qualified work experience'],
+    ['clock',SKY,'Hackathons','24–48hr community challenges'],
+    ['drone',MINT,'Drone Football Club','Weekly STEM &amp; teamwork club']
+  ]);
 })();
 </script>
 </body>
